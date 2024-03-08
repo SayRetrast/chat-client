@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { PrimeReactProvider } from "primereact/api";
 import "./index.css";
-import "primereact/resources/themes/lara-light-blue/theme.css";
+import "primereact/resources/themes/luna-amber/theme.css";
 import "primeicons/primeicons.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./lib/router";
