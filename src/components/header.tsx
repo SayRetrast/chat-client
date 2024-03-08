@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { homePagePath, signInPagePath } from "../lib/paths";
+import { homePagePath, authPagePath } from "../lib/paths";
 import { Button } from "primereact/button";
 
 export default function Header() {
   return (
-    <header className="mx-1.5">
+    <header className="mx-4">
       <div
-        className="container mx-auto mt-1 flex h-[46px] items-center justify-between rounded-2xl shadow"
+        className="container mx-auto mt-1 flex h-[46px] items-center justify-between rounded-xl shadow"
         style={{ backgroundColor: "var(--primary-color)" }}
       >
         <Link
@@ -20,20 +20,20 @@ export default function Header() {
         <nav>
           <ul className="flex gap-x-4">
             <li>
-              <Link to={signInPagePath} className="font-medium" style={{ color: "var(--highlight-text-color)" }}>
+              <Link to={authPagePath} className="font-medium" style={{ color: "var(--highlight-text-color)" }}>
                 <Button icon="pi pi-comments" size="small" className="h-[28px] w-[28px] p-0" />
               </Link>
             </li>
 
             <li>
-              <Link to={signInPagePath} className="font-medium" style={{ color: "var(--highlight-text-color)" }}>
+              <Link to={authPagePath} className="font-medium" style={{ color: "var(--highlight-text-color)" }}>
                 <Button icon="pi pi-search" size="small" className="h-[28px] w-[28px] p-0" />
               </Link>
             </li>
 
             <li>
-              <Link to={signInPagePath} className="font-medium" style={{ color: "var(--highlight-text-color)" }}>
-                <Button icon="pi pi-user" size="small" className="h-[28px] w-[28px] p-0" />
+              <Link to={authPagePath} className="font-medium" style={{ color: "var(--highlight-text-color)" }}>
+                <Button icon="pi pi-sign-in" size="small" className="h-[28px] w-[28px] p-0" />
               </Link>
             </li>
           </ul>
