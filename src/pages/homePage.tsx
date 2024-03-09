@@ -6,7 +6,7 @@ import ContactsList from "../components/contacts/contactsList";
 
 function SignIn() {
   return (
-    <div className="mt-6 flex flex-col items-center justify-center gap-y-3">
+    <div className="flex flex-col items-center justify-center gap-y-3">
       <h2 className="text-center text-lg font-bold">Sign in to your account to start chatting.</h2>
 
       <Link to={authPagePath}>
@@ -17,15 +17,5 @@ function SignIn() {
 }
 
 export default function HomePage() {
-  return (
-    <>
-      {user.isAuth ? (
-        <SignIn />
-      ) : (
-        <div className="mt-6">
-          <ContactsList />
-        </div>
-      )}
-    </>
-  );
+  return <>{user.isAuth ? <ContactsList /> : <SignIn />}</>;
 }

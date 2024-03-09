@@ -38,7 +38,7 @@ function PasswordFooter() {
 
 export default function AuthPage() {
   return (
-    <TabView className="auth-card-container mt-4">
+    <TabView className="auth-card-container">
       <TabPanel header="Sign in">
         <form className="flex flex-col gap-y-2" method="post">
           <div className="flex flex-col gap-y-1">

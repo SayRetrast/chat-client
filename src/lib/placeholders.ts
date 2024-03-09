@@ -9,7 +9,7 @@ type Contact = {
 export const user: { id: number; username: string; isAuth: boolean } = {
   id: 46,
   username: "Retrast",
-  isAuth: false,
+  isAuth: true,
 };
 
 export const contacts: Contact[] = [
