@@ -25,7 +25,7 @@ export default function DialogPage() {
   return (
     <div className="flex h-[calc(100svh_-_46px_-_4rem)] flex-col gap-y-3">
       {noMessages ? (
-        <p className="text-center text-lg font-medium">Start chatting by typing message in the filed bellow.</p>
+        <p className="text-center text-lg font-medium">Start chatting by typing in the filed bellow.</p>
       ) : (
         <>
           <p className="text-center">24 March</p>
