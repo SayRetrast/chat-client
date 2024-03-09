@@ -7,8 +7,8 @@ import { Avatar } from "primereact/avatar";
 
 export default function Header() {
   return (
-    <header className="mx-4">
-      <div className="container mx-auto mt-4 flex h-[46px] items-center justify-between rounded bg-[var(--primary-color)] ">
+    <header className="mx-4 pt-4">
+      <div className="container mx-auto flex h-[46px] items-center justify-between rounded bg-[var(--primary-color)] ">
         <Link to={homePagePath} className="text-sm font-semibold tracking-wide text-[var(--primary-color-text)]">
           {user.isAuth ? (
             <div className="flex items-center gap-x-2">
