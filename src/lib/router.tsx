@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import { homePagePath, authPagePath, settingsPagePath } from "./paths";
+import { homePagePath, authPagePath, settingsPagePath, dialogPagePath } from "./paths";
 import HomePage from "../pages/homePage";
 import RootLayout from "../layouts/rootLayout";
 import AuthPage from "../pages/auth/authPage";
 import SettingsPage from "../pages/settings/settingsPage";
+import DialogPage from "../pages/dialog/dialogPage";
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: settingsPagePath,
         element: <SettingsPage />,
+      },
+      {
+        path: dialogPagePath,
+        element: <DialogPage />,
       },
     ],
   },

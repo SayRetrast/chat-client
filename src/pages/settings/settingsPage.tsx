@@ -34,9 +34,24 @@ export default function SettingsPage() {
           </SettingsMenuItem>
 
           <SettingsMenuItem>
-            <label htmlFor="username">Password</label>
-            <Password className="block" inputId="password" placeholder="Old password" feedback={false} toggleMask />
-            <Password className="block" inputId="password" placeholder="New password" feedback={false} toggleMask />
+            <label htmlFor="old-password">Old password</label>
+            <Password
+              className="block"
+              inputId="old-password"
+              placeholder="Your old password"
+              feedback={false}
+              toggleMask
+            />
+
+            <label htmlFor="new-password">New password</label>
+            <Password
+              className="block"
+              inputId="new-password"
+              placeholder="Your new password"
+              feedback={false}
+              toggleMask
+            />
+
             <Button label="Update password" />
           </SettingsMenuItem>
         </SettingsMenu>

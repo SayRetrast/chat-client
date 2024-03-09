@@ -7,6 +7,7 @@ export default function ContactsList() {
       {contacts.map(({ id, username, messages }) => (
         <Contact
           key={id}
+          userId={id}
           username={username}
           message={messages[messages.length - 1]}
           unreadMessagesCount={messages.length - 2}
