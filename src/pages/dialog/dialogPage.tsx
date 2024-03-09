@@ -7,8 +7,8 @@ const noMessages: boolean = false;
 function Message({ text, username, time, isRight }: { text: string; username: string; time: string; isRight?: true }) {
   return (
     <div
-      className={cn("max-w-[calc(100%_-_15%)] rounded bg-[var(--surface-overlay)] p-2", {
-        "ml-[15%] bg-[var(--primary-color)] text-[var(--primary-color-text)]": isRight,
+      className={cn("max-w-[calc(100%_-_15%)] break-all rounded bg-[var(--surface-ground)] p-2", {
+        "ml-[15%] bg-[var(--surface-overlay)]": isRight,
       })}
     >
       <div className="flex justify-between text-sm text-[var(--text-color-secondary)]">
@@ -16,7 +16,14 @@ function Message({ text, username, time, isRight }: { text: string; username: st
         <p>{time}</p>
       </div>
 
-      <p className="mt-0.5">{text}</p>
+      <div className="flex gap-x-2">
+        <p className="mt-1">{text}</p>
+
+        <div className="ml-auto mt-auto flex flex-col">
+          {!isRight && <i className="pi pi-check translate-y-1 text-xs text-[var(--text-color-secondary)]"></i>}
+          <i className="pi pi-check -translate-y-1 text-xs text-[var(--text-color-secondary)]"></i>
+        </div>
+      </div>
     </div>
   );
 }
