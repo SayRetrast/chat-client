@@ -2,18 +2,34 @@ import { Link } from "react-router-dom";
 import { homePagePath, authPagePath, settingsPagePath } from "../lib/paths";
 import { Button } from "primereact/button";
 import { cn } from "../lib/utils";
-import { user } from "../lib/placeholders";
 import { Avatar } from "primereact/avatar";
+import { useContext } from "react";
+import { UserContext, UserContextType } from "../contexts/UserContext";
+import { AccessTokenContext, AccessTokenContextType } from "../contexts/AccessTokenContext";
+import { logoutAPI } from "../api/auth/logout.api";
 
 export default function Header() {
+  const { user, setUser } = useContext(UserContext) as UserContextType;
+  const { accessToken, setAccessToken } = useContext(AccessTokenContext) as AccessTokenContextType;
+
+  function logoutHandler() {
+    if (!accessToken) {
+      throw new Error("Unauthorized");
+    }
+    logoutAPI(accessToken);
+
+    setUser(null);
+    setAccessToken(null);
+  }
+
   return (
     <header className="mx-4 pt-4">
       <div className="container mx-auto flex h-[46px] items-center justify-between rounded bg-[var(--primary-color)] ">
         <Link to={homePagePath} className="text-sm font-semibold tracking-wide text-[var(--primary-color-text)]">
-          {user.isAuth ? (
+          {user ? (
             <div className="flex items-center gap-x-2">
               <Avatar id="avatar" icon="pi pi-user" className="h-[28px] w-[28px] text-[var(--text-color)]" />
-              <p>Retrast</p>
+              <p>{user.username}</p>
             </div>
           ) : (
             "ChatApp"
@@ -22,25 +38,31 @@ export default function Header() {
 
         <nav>
           <ul className="flex gap-x-1">
-            <li className={cn({ hidden: !user.isAuth })}>
+            <li className={cn({ hidden: !user })}>
               <Link to={homePagePath} className="font-medium text-[var(--highlight-text-color)]">
                 <Button icon="pi pi-comments" size="small" className="h-[28px] w-[28px] p-0" />
               </Link>
             </li>
 
-            <li className={cn({ hidden: !user.isAuth })}>
+            <li className={cn({ hidden: !user })}>
               <Link to={settingsPagePath} className="font-medium text-[var(--highlight-text-color)]">
                 <Button icon="pi pi-cog" size="small" className="h-[28px] w-[28px] p-0" />
               </Link>
             </li>
 
-            <li className={cn({ hidden: !user.isAuth })}>
+            <li className={cn({ hidden: !user })}>
               <Link to={"#"} className="font-medium text-[var(--highlight-text-color)]">
-                <Button icon="pi pi-sign-out" label="Sign out" size="small" className="h-[28px] p-0 px-2" />
+                <Button
+                  icon="pi pi-sign-out"
+                  label="Sign out"
+                  size="small"
+                  className="h-[28px] p-0 px-2"
+                  onClick={logoutHandler}
+                />
               </Link>
             </li>
 
-            <li className={cn({ hidden: user.isAuth })}>
+            <li className={cn({ hidden: user })}>
               <Link to={authPagePath} className="font-medium text-[var(--highlight-text-color)]">
                 <Button icon="pi pi-sign-in" label="Sign in" size="small" className="h-[28px] p-0 px-2" />
               </Link>

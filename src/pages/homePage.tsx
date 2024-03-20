@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { authPagePath } from "../lib/paths";
 import { Button } from "primereact/button";
-import { user } from "../lib/placeholders";
 import ContactsList from "../components/contacts/contactsList";
+import { useContext } from "react";
+import { UserContext, UserContextType } from "../contexts/UserContext";
 
 function SignIn() {
   return (
@@ -17,5 +18,7 @@ function SignIn() {
 }
 
 export default function HomePage() {
-  return <>{user.isAuth ? <ContactsList /> : <SignIn />}</>;
+  const { user } = useContext(UserContext) as UserContextType;
+
+  return <>{user ? <ContactsList /> : <SignIn />}</>;
 }

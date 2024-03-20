@@ -1,31 +1,47 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, Route, RouteProps, Routes } from "react-router-dom";
 import { homePagePath, authPagePath, settingsPagePath, dialogPagePath } from "./paths";
 import HomePage from "../pages/homePage";
 import RootLayout from "../layouts/rootLayout";
 import AuthPage from "../pages/auth/authPage";
 import SettingsPage from "../pages/settings/settingsPage";
 import DialogPage from "../pages/dialog/dialogPage";
+import { useContext } from "react";
+import { UserContext, UserContextType } from "../contexts/UserContext";
 
-export const router = createBrowserRouter([
+const protectedWhenLoginRoutes: RouteProps[] = [
   {
-    element: <RootLayout />,
-    children: [
-      {
-        path: homePagePath,
-        element: <HomePage />,
-      },
-      {
-        path: authPagePath,
-        element: <AuthPage />,
-      },
-      {
-        path: settingsPagePath,
-        element: <SettingsPage />,
-      },
-      {
-        path: dialogPagePath,
-        element: <DialogPage />,
-      },
-    ],
+    path: settingsPagePath,
+    element: <SettingsPage />,
   },
-]);
+  {
+    path: dialogPagePath,
+    element: <DialogPage />,
+  },
+];
+
+const protectedWhenNotLoginRoutes: RouteProps[] = [
+  {
+    path: authPagePath,
+    element: <AuthPage />,
+  },
+];
+
+export default function Router() {
+  const { user } = useContext(UserContext) as UserContextType;
+
+  return (
+    <Routes>
+      <Route element={<RootLayout />}>
+        <Route path={homePagePath} element={<HomePage />}></Route>
+        {user &&
+          protectedWhenLoginRoutes.map(({ path, element }) => <Route key={path} path={path} element={element}></Route>)}
+        {!user &&
+          protectedWhenNotLoginRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element}></Route>
+          ))}
+      </Route>
+
+      <Route path="*" element={<Navigate to={homePagePath} />}></Route>
+    </Routes>
+  );
+}
