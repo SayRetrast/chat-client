@@ -3,14 +3,17 @@ import { Divider } from "primereact/divider";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { TabPanel, TabView } from "primereact/tabview";
-import { useContext, useState } from "react";
-import { UserContext, UserContextType } from "../../contexts/UserContext";
-import { AccessTokenContext, AccessTokenContextType } from "../../contexts/AccessTokenContext";
+
 import { registrationAPI } from "../../api/auth/registration.api";
 import { jwtDecode } from "jwt-decode";
 import { DecodedJwtType } from "../../types/decodedJwt.type";
 import { loginAPI } from "../../api/auth/login.api";
 import { useNavigate } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
+import { setUser } from "../../state/slices/user.slice";
+import { setAccessToken } from "../../state/slices/accessToken.slice";
+import { useState } from "react";
 
 function PasswordFooter() {
   return (
@@ -47,8 +50,7 @@ function PasswordFooter() {
 export default function AuthPage() {
   const navigate = useNavigate();
 
-  const { setUser } = useContext(UserContext) as UserContextType;
-  const { setAccessToken } = useContext(AccessTokenContext) as AccessTokenContextType;
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState<{ username: string; password: string }>({ username: "", password: "" });
 
@@ -57,11 +59,11 @@ export default function AuthPage() {
     if (!accessToken) {
       throw new Error("Could not create an account.");
     }
-    setAccessToken(accessToken);
+    dispatch(setAccessToken(accessToken));
 
     const decodedJwt: DecodedJwtType = jwtDecode(accessToken);
     const userData = { id: decodedJwt.sub, username: decodedJwt.username };
-    setUser(userData);
+    dispatch(setUser({ id: userData.id, username: userData.username }));
 
     navigate("/");
   }
@@ -71,11 +73,11 @@ export default function AuthPage() {
     if (!accessToken) {
       throw new Error("Could not login to an account.");
     }
-    setAccessToken(accessToken);
+    dispatch(setAccessToken(accessToken));
 
     const decodedJwt: DecodedJwtType = jwtDecode(accessToken);
     const userData = { id: decodedJwt.sub, username: decodedJwt.username };
-    setUser(userData);
+    dispatch(setUser({ id: userData.id, username: userData.username }));
 
     navigate("/");
   }

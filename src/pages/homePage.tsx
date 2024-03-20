@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import { authPagePath } from "../lib/paths";
 import { Button } from "primereact/button";
 import ContactsList from "../components/contacts/contactsList";
-import { useContext } from "react";
-import { UserContext, UserContextType } from "../contexts/UserContext";
+
+import { useSelector } from "react-redux";
+import { RootState } from "../state/store";
 
 function SignIn() {
   return (
@@ -18,7 +19,7 @@ function SignIn() {
 }
 
 export default function HomePage() {
-  const { user } = useContext(UserContext) as UserContextType;
+  const user = useSelector((state: RootState) => state.user);
 
-  return <>{user ? <ContactsList /> : <SignIn />}</>;
+  return <>{user.isAuth ? <ContactsList /> : <SignIn />}</>;
 }

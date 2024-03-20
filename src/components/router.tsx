@@ -1,12 +1,13 @@
 import { Navigate, Route, RouteProps, Routes } from "react-router-dom";
-import { homePagePath, authPagePath, settingsPagePath, dialogPagePath } from "./paths";
+import { homePagePath, authPagePath, settingsPagePath, dialogPagePath } from "../lib/paths";
 import HomePage from "../pages/homePage";
 import RootLayout from "../layouts/rootLayout";
 import AuthPage from "../pages/auth/authPage";
 import SettingsPage from "../pages/settings/settingsPage";
 import DialogPage from "../pages/dialog/dialogPage";
-import { useContext } from "react";
-import { UserContext, UserContextType } from "../contexts/UserContext";
+
+import { useSelector } from "react-redux";
+import { RootState } from "../state/store";
 
 const protectedWhenLoginRoutes: RouteProps[] = [
   {
@@ -27,15 +28,16 @@ const protectedWhenNotLoginRoutes: RouteProps[] = [
 ];
 
 export default function Router() {
-  const { user } = useContext(UserContext) as UserContextType;
+  // const { user } = useContext(UserContext) as UserContextType;
+  const user = useSelector((state: RootState) => state.user);
 
   return (
     <Routes>
       <Route element={<RootLayout />}>
         <Route path={homePagePath} element={<HomePage />}></Route>
-        {user &&
+        {user.isAuth &&
           protectedWhenLoginRoutes.map(({ path, element }) => <Route key={path} path={path} element={element}></Route>)}
-        {!user &&
+        {!user.isAuth &&
           protectedWhenNotLoginRoutes.map(({ path, element }) => (
             <Route key={path} path={path} element={element}></Route>
           ))}

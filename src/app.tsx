@@ -1,27 +1,28 @@
-import { useCallback, useContext, useEffect } from "react";
-import Router from "./lib/router";
+import { useCallback, useEffect } from "react";
+import Router from "./components/router";
 import { BrowserRouter } from "react-router-dom";
-import { UserContext, UserContextType } from "./contexts/UserContext";
-import { AccessTokenContext, AccessTokenContextType } from "./contexts/AccessTokenContext";
+
 import { authAPI } from "./api/auth/auth.api";
 import { DecodedJwtType } from "./types/decodedJwt.type";
 import { jwtDecode } from "jwt-decode";
+import { useDispatch } from "react-redux";
+import { setAccessToken } from "./state/slices/accessToken.slice";
+import { setUser } from "./state/slices/user.slice";
 
 export default function App() {
-  const { setUser } = useContext(UserContext) as UserContextType;
-  const { setAccessToken } = useContext(AccessTokenContext) as AccessTokenContextType;
+  const dispatch = useDispatch();
 
   const authHandler = useCallback(async () => {
     const { accessToken } = await authAPI();
     if (!accessToken) {
       throw new Error("Could not authorize.");
     }
-    setAccessToken(accessToken);
+    dispatch(setAccessToken(accessToken));
 
     const decodedJwt: DecodedJwtType = jwtDecode(accessToken);
     const userData = { id: decodedJwt.sub, username: decodedJwt.username };
-    setUser(userData);
-  }, [setAccessToken, setUser]);
+    dispatch(setUser({ id: userData.id, username: userData.username }));
+  }, [dispatch]);
 
   useEffect(() => {
     authHandler();
