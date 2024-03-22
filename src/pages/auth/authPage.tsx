@@ -4,16 +4,16 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { TabPanel, TabView } from "primereact/tabview";
 
-import { registrationAPI } from "../../api/auth/registration.api";
 import { jwtDecode } from "jwt-decode";
 import { DecodedJwtType } from "../../types/decodedJwt.type";
-import { loginAPI } from "../../api/auth/login.api";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "../../state/slices/user.slice";
 import { setAccessToken } from "../../state/slices/accessToken.slice";
 import { useState } from "react";
+import { useLoginMutation, useRegistrationMutation } from "../../state/services/auth.service";
+import { AuthBodyType } from "../../types/auth.type";
 
 function PasswordFooter() {
   return (
@@ -52,10 +52,13 @@ export default function AuthPage() {
 
   const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState<{ username: string; password: string }>({ username: "", password: "" });
+  const [registration] = useRegistrationMutation();
+  const [login] = useLoginMutation();
+
+  const [formData, setFormData] = useState<AuthBodyType>({ username: "", password: "" });
 
   async function registrationHandler() {
-    const { accessToken } = await registrationAPI(formData);
+    const { accessToken } = await registration(formData).unwrap();
     if (!accessToken) {
       throw new Error("Could not create an account.");
     }
@@ -69,7 +72,7 @@ export default function AuthPage() {
   }
 
   async function loginHandler() {
-    const { accessToken } = await loginAPI(formData);
+    const { accessToken } = await login(formData).unwrap();
     if (!accessToken) {
       throw new Error("Could not login to an account.");
     }

@@ -3,23 +3,24 @@ import { homePagePath, authPagePath, settingsPagePath } from "../lib/paths";
 import { Button } from "primereact/button";
 import { cn } from "../lib/utils";
 import { Avatar } from "primereact/avatar";
-import { logoutAPI } from "../api/auth/logout.api";
 import { useSelector } from "react-redux";
 import { RootState } from "../state/store";
 import { useDispatch } from "react-redux";
 import { cleanAccessToken } from "../state/slices/accessToken.slice";
 import { cleanUser } from "../state/slices/user.slice";
+import { useDeleteMutation } from "../state/services/auth.service";
 
 export default function Header() {
   const user = useSelector((state: RootState) => state.user);
   const accessToken = useSelector((state: RootState) => state.accessToken.accessToken);
   const dispatch = useDispatch();
+  const [logout] = useDeleteMutation();
 
   function logoutHandler() {
     if (!accessToken) {
       throw new Error("Unauthorized");
     }
-    logoutAPI(accessToken);
+    logout({ accessToken });
 
     dispatch(cleanAccessToken());
     dispatch(cleanUser());
