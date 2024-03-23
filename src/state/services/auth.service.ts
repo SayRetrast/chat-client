@@ -1,11 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { AuthBodyType } from "../../types/auth.type";
 
+type AuthResponseType = {
+  accessToken: string;
+};
+
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL + "/auth" }),
   endpoints: (builder) => ({
-    registration: builder.mutation<{ accessToken: string }, AuthBodyType>({
+    registration: builder.mutation<AuthResponseType, AuthBodyType>({
       query: (body) => ({
         url: "/registration",
         method: "POST",
@@ -17,7 +21,7 @@ export const authApi = createApi({
       }),
     }),
 
-    login: builder.mutation<{ accessToken: string }, AuthBodyType>({
+    login: builder.mutation<AuthResponseType, AuthBodyType>({
       query: (body) => ({
         url: "/login",
         method: "POST",
@@ -29,7 +33,7 @@ export const authApi = createApi({
       }),
     }),
 
-    auth: builder.mutation<{ accessToken: string }, void>({
+    auth: builder.mutation<AuthResponseType, void>({
       query: () => ({
         url: "",
         method: "PUT",

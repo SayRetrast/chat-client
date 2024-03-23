@@ -29,7 +29,6 @@ export default function App() {
   }, [authHandler]);
 
   if (isUninitialized || isLoading) {
-    console.log(1);
     return "Loading...";
   }
 
