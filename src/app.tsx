@@ -13,15 +13,16 @@ export default function App() {
   const [auth, { isUninitialized, isLoading }] = useAuthMutation();
 
   const authHandler = useCallback(async () => {
-    const { accessToken } = await auth().unwrap();
-    if (!accessToken) {
-      throw new Error("Could not authorize.");
-    }
-    dispatch(setAccessToken(accessToken));
+    try {
+      const { accessToken } = await auth().unwrap();
+      dispatch(setAccessToken(accessToken));
 
-    const decodedJwt: DecodedJwtType = jwtDecode(accessToken);
-    const userData = { id: decodedJwt.sub, username: decodedJwt.username };
-    dispatch(setUser({ id: userData.id, username: userData.username }));
+      const decodedJwt: DecodedJwtType = jwtDecode(accessToken);
+      const userData = { id: decodedJwt.sub, username: decodedJwt.username };
+      dispatch(setUser({ id: userData.id, username: userData.username }));
+    } catch (error) {
+      console.log("Sign in to an account to start using this app.");
+    }
   }, [auth, dispatch]);
 
   useEffect(() => {

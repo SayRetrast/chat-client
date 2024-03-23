@@ -26,8 +26,8 @@ export default function AuthPage() {
 
   const dispatch = useDispatch();
 
-  const [registration] = useRegistrationMutation();
-  const [login, { error, isError }] = useLoginMutation();
+  const [registration, { error: regError, isError: isRegError }] = useRegistrationMutation();
+  const [login, { error: logError, isError: isLogError }] = useLoginMutation();
 
   const {
     handleSubmit,
@@ -43,34 +43,37 @@ export default function AuthPage() {
   });
 
   const loginOnSubmit: SubmitHandler<FormInputs> = async (formData) => {
-    const authData: AuthBodyType = { username: formData.logUsername, password: formData.logPassword };
-    const { accessToken } = await login(authData).unwrap();
-    if (!accessToken) {
-      throw new Error("Could not login to an account.");
+    try {
+      const authData: AuthBodyType = { username: formData.logUsername, password: formData.logPassword };
+
+      const { accessToken } = await login(authData).unwrap();
+      dispatch(setAccessToken(accessToken));
+
+      const decodedJwt: DecodedJwtType = jwtDecode(accessToken);
+      const userData = { id: decodedJwt.sub, username: decodedJwt.username };
+      dispatch(setUser({ id: userData.id, username: userData.username }));
+
+      navigate("/");
+    } catch (error) {
+      console.error("There was an error when trying to sign in.", error);
     }
-    dispatch(setAccessToken(accessToken));
-
-    const decodedJwt: DecodedJwtType = jwtDecode(accessToken);
-    const userData = { id: decodedJwt.sub, username: decodedJwt.username };
-    dispatch(setUser({ id: userData.id, username: userData.username }));
-
-    navigate("/");
   };
 
   const registrationOnSubmit: SubmitHandler<FormInputs> = async (formData) => {
-    const authData: AuthBodyType = { username: formData.regUsername, password: formData.regPassword };
+    try {
+      const authData: AuthBodyType = { username: formData.regUsername, password: formData.regPassword };
 
-    const { accessToken } = await registration(authData).unwrap();
-    if (!accessToken) {
-      throw new Error("Could not create an account.");
+      const { accessToken } = await registration(authData).unwrap();
+      dispatch(setAccessToken(accessToken));
+
+      const decodedJwt: DecodedJwtType = jwtDecode(accessToken);
+      const userData = { id: decodedJwt.sub, username: decodedJwt.username };
+      dispatch(setUser({ id: userData.id, username: userData.username }));
+
+      navigate("/");
+    } catch (error) {
+      console.error("There was an error when trying to sign up.", error);
     }
-    dispatch(setAccessToken(accessToken));
-
-    const decodedJwt: DecodedJwtType = jwtDecode(accessToken);
-    const userData = { id: decodedJwt.sub, username: decodedJwt.username };
-    dispatch(setUser({ id: userData.id, username: userData.username }));
-
-    navigate("/");
   };
 
   return (
@@ -113,7 +116,7 @@ export default function AuthPage() {
 
           <Button type="submit" label="Sign in" />
 
-          {isError && isFetchBaseQueryError(error) && error.status === 400 && (
+          {isLogError && isFetchBaseQueryError(logError) && logError.status === 400 && (
             <ErrorMessage>Wrong username or password.</ErrorMessage>
           )}
         </form>
@@ -163,6 +166,10 @@ export default function AuthPage() {
           </div>
 
           <Button type="submit" label="Sign up" />
+
+          {isRegError && isFetchBaseQueryError(regError) && regError.status === 422 && (
+            <ErrorMessage>Such username is already taken.</ErrorMessage>
+          )}
         </form>
       </TabPanel>
     </TabView>
