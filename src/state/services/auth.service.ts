@@ -1,17 +1,19 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { AuthBodyType } from "../../types/auth.type";
+import { rootApi } from "../rootApi";
 
 type AuthResponseType = {
   accessToken: string;
 };
 
-export const authApi = createApi({
-  reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL + "/auth" }),
+export type AuthBodyType = {
+  username: string;
+  password: string;
+};
+
+export const authApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
     registration: builder.mutation<AuthResponseType, AuthBodyType>({
       query: (body) => ({
-        url: "/registration",
+        url: "auth/registration/",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,7 +25,7 @@ export const authApi = createApi({
 
     login: builder.mutation<AuthResponseType, AuthBodyType>({
       query: (body) => ({
-        url: "/login",
+        url: "auth/login/",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +37,7 @@ export const authApi = createApi({
 
     auth: builder.mutation<AuthResponseType, void>({
       query: () => ({
-        url: "",
+        url: "auth/",
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +48,7 @@ export const authApi = createApi({
 
     delete: builder.mutation<void, { accessToken: string }>({
       query: ({ accessToken }) => ({
-        url: "/logout",
+        url: "auth/logout/",
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -56,6 +58,8 @@ export const authApi = createApi({
       }),
     }),
   }),
+
+  overrideExisting: false,
 });
 
 export const { useRegistrationMutation, useLoginMutation, useAuthMutation, useDeleteMutation } = authApi;

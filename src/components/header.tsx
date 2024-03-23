@@ -17,13 +17,17 @@ export default function Header() {
   const [logout] = useDeleteMutation();
 
   function logoutHandler() {
-    if (!accessToken) {
-      throw new Error("Unauthorized");
-    }
-    logout({ accessToken });
+    try {
+      if (!accessToken) {
+        throw new Error("Unauthorized");
+      }
+      logout({ accessToken });
 
-    dispatch(cleanAccessToken());
-    dispatch(cleanUser());
+      dispatch(cleanAccessToken());
+      dispatch(cleanUser());
+    } catch (error) {
+      console.error("There was an error when trying to sign out.", error);
+    }
   }
 
   return (
