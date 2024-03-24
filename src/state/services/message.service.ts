@@ -11,11 +11,18 @@ type MessageResponseType = {
 
 export const messageApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
-    // sendMessage: builder.mutation<MessageResponseType, {accessToken: string; toUserId: string}>({
-    //   query: ({accessToken, toUserId}) => ({
-    //     url: 'messages/'
-    //   })
-    // })
+    sendMessage: builder.mutation<MessageResponseType, { accessToken: string; toUserId: string; text: string }>({
+      query: ({ accessToken, toUserId, text }) => ({
+        url: `messages/${toUserId}`,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: { text: text },
+      }),
+      invalidatesTags: ["Message"],
+    }),
+
     getDialogMessages: builder.query<MessageResponseType[], { accessToken: string; toUserId: string }>({
       query: ({ accessToken, toUserId }) => ({
         url: `messages/dialog/${toUserId}`,
@@ -23,8 +30,9 @@ export const messageApi = rootApi.injectEndpoints({
           Authorization: `Bearer ${accessToken}`,
         },
       }),
+      providesTags: ["Message"],
     }),
   }),
 });
 
-export const { useGetDialogMessagesQuery } = messageApi;
+export const { useGetDialogMessagesQuery, useSendMessageMutation } = messageApi;

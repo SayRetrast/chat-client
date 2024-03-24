@@ -16,6 +16,7 @@ export const userApi = rootApi.injectEndpoints({
         },
       }),
     }),
+
     getUserById: builder.query<UserResponseType, { accessToken: string; userId: string }>({
       query: ({ accessToken, userId }) => ({
         url: `users/user/${userId}`,

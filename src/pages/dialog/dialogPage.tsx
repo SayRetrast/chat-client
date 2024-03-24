@@ -1,11 +1,10 @@
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import { useParams } from "react-router-dom";
 import { useGetUserByIdQuery } from "../../state/services/user.service";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
 import { ProgressSpinner } from "primereact/progressspinner";
 import MessagesList from "../../components/messages/messagesList";
+import SendMessageForm from "../../components/forms/sendMessageForm";
 
 export default function DialogPage() {
   const { userId } = useParams();
@@ -25,10 +24,7 @@ export default function DialogPage() {
 
       {isSuccess && <MessagesList accessToken={accessToken!} toUser={user} fromUserUsername={fromUser.username!} />}
 
-      <div className="mt-auto grid grid-cols-[1fr_31.5px] gap-x-2">
-        <InputText placeholder="Type your message here" disabled={isLoading} />
-        <Button icon="pi pi-send" disabled={isLoading} />
-      </div>
+      <SendMessageForm accessToken={accessToken!} toUserId={userId!} isLoading={isLoading} />
     </div>
   );
 }
