@@ -10,6 +10,7 @@ import { Divider } from "primereact/divider";
 import { useSearchUsersQuery } from "../state/services/user.service";
 import FoundUserContact from "../components/contacts/foundUserContact";
 import ContactsList from "../components/contacts/contactsList";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 interface FormInputs {
   search: string;
@@ -31,7 +32,7 @@ function SearchUsersForm({
   const searchOnSubmit = debounce((formData: FormInputs) => {
     searchParams.set("search", formData.search);
     setSearchParams(searchParams);
-  }, 300);
+  }, 500);
 
   return (
     <form>
@@ -57,7 +58,7 @@ function SearchUsersForm({
 
 function FoundUsers({ paramSearchValue }: { paramSearchValue?: string }) {
   const { accessToken } = useSelector((state: RootState) => state.accessToken);
-  const { data } = useSearchUsersQuery({
+  const { data, isLoading, isSuccess } = useSearchUsersQuery({
     accessToken: accessToken!,
     username: paramSearchValue!,
   });
@@ -66,15 +67,22 @@ function FoundUsers({ paramSearchValue }: { paramSearchValue?: string }) {
     <div>
       <Divider />
       <h2 className="px-3 text-lg font-bold">Found users</h2>
-      {data?.length ? (
-        <ul className="mt-3.5 grid grid-cols-2 gap-y-3.5">
+
+      {isLoading && (
+        <div className="flex w-full">
+          <ProgressSpinner className="h-8 w-8" />
+        </div>
+      )}
+
+      {isSuccess && data.length > 0 && (
+        <ul className="mt-3.5 flex grid-cols-2 flex-col gap-y-3.5 md:grid">
           {data.map((user) => (
             <FoundUserContact key={user.userId} userId={user.userId} username={user.username} />
           ))}
         </ul>
-      ) : (
-        <h2 className="text-center text-lg font-bold">No users were found.</h2>
       )}
+
+      {isSuccess && data.length === 0 && <h2 className="text-center text-lg font-bold">No users were found.</h2>}
     </div>
   );
 }

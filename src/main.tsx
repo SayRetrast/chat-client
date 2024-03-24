@@ -6,8 +6,6 @@ import "primeicons/primeicons.css";
 import App from "./app";
 import { PrimeReactProvider } from "primereact/api";
 import { primeReactConfig } from "./lib/primeReactConfig";
-// import UserProvider from "./contexts/UserContext";
-// import AccessTokenProvider from "./contexts/AccessTokenContext";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
 
