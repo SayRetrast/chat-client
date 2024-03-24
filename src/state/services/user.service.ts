@@ -1,6 +1,6 @@
 import { rootApi } from "../rootApi";
 
-type UserResponseType = {
+export type UserResponseType = {
   userId: string;
   username: string;
   avatar: string | null;
@@ -16,7 +16,15 @@ export const userApi = rootApi.injectEndpoints({
         },
       }),
     }),
+    getUserById: builder.query<UserResponseType, { accessToken: string; userId: string }>({
+      query: ({ accessToken, userId }) => ({
+        url: `users/user/${userId}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useSearchUsersQuery } = userApi;
+export const { useSearchUsersQuery, useGetUserByIdQuery } = userApi;

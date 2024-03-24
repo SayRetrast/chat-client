@@ -15,9 +15,6 @@ export const authApi = rootApi.injectEndpoints({
       query: (body) => ({
         url: "auth/registration/",
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body,
         credentials: "include",
       }),
@@ -27,9 +24,6 @@ export const authApi = rootApi.injectEndpoints({
       query: (body) => ({
         url: "auth/login/",
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body,
         credentials: "include",
       }),
@@ -39,9 +33,6 @@ export const authApi = rootApi.injectEndpoints({
       query: () => ({
         url: "auth/",
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
       }),
     }),
@@ -51,7 +42,6 @@ export const authApi = rootApi.injectEndpoints({
         url: "auth/logout/",
         method: "DELETE",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
         credentials: "include",

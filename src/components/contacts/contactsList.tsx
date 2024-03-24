@@ -1,9 +1,10 @@
 import { contacts } from "../../lib/placeholders";
+import { cn } from "../../lib/utils";
 import Contact from "./contact";
 
-export default function ContactsList() {
+export default function ContactsList({ className }: { className?: string }) {
   return (
-    <ul className="flex flex-col gap-y-3">
+    <ul className={cn("flex flex-col gap-y-3", className)}>
       {contacts.map(({ id, username, messages }) => (
         <Contact
           key={id}

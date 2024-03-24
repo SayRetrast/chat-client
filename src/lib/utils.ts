@@ -9,3 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryError {
   return typeof error === "object" && error != null && "status" in error;
 }
+
+export function extractTimeFromDate(date: string): string {
+  return date.split("T")[1].split(".")[0];
+}

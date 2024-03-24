@@ -1,94 +1,12 @@
-import { Link, SetURLSearchParams, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { authPagePath } from "../lib/paths";
 import { Button } from "primereact/button";
 import { useSelector } from "react-redux";
 import { RootState } from "../state/store";
-import { InputText } from "primereact/inputtext";
-import { Controller, useForm } from "react-hook-form";
-import debounce from "debounce";
 import { Divider } from "primereact/divider";
-import { useSearchUsersQuery } from "../state/services/user.service";
-import FoundUserContact from "../components/contacts/foundUserContact";
 import ContactsList from "../components/contacts/contactsList";
-import { ProgressSpinner } from "primereact/progressspinner";
-
-interface FormInputs {
-  search: string;
-}
-
-function SearchUsersForm({
-  searchParams,
-  setSearchParams,
-}: {
-  searchParams: URLSearchParams;
-  setSearchParams: SetURLSearchParams;
-}) {
-  const { handleSubmit, control } = useForm<FormInputs>({
-    defaultValues: {
-      search: searchParams.get("search") || "",
-    },
-  });
-
-  const searchOnSubmit = debounce((formData: FormInputs) => {
-    searchParams.set("search", formData.search);
-    setSearchParams(searchParams);
-  }, 500);
-
-  return (
-    <form>
-      <Controller
-        name="search"
-        control={control}
-        render={({ field }) => (
-          <InputText
-            className="w-full"
-            type="text"
-            placeholder="Find an user to chat with"
-            onChange={(e) => {
-              field.onChange(e.target.value);
-              handleSubmit(searchOnSubmit)();
-            }}
-            defaultValue={searchParams.get("search")?.toString()}
-          />
-        )}
-      />
-    </form>
-  );
-}
-
-function FoundUsers({ paramSearchValue, currentUserId }: { paramSearchValue?: string; currentUserId: string }) {
-  const { accessToken } = useSelector((state: RootState) => state.accessToken);
-  const { data, isLoading, isSuccess } = useSearchUsersQuery({
-    accessToken: accessToken!,
-    username: paramSearchValue!,
-  });
-
-  return (
-    <div>
-      <Divider />
-      <h2 className="px-3 text-lg font-bold">Found users</h2>
-
-      {isLoading && (
-        <div className="flex w-full">
-          <ProgressSpinner className="h-8 w-8" />
-        </div>
-      )}
-
-      {isSuccess && data.length > 0 && (
-        <ul className="mt-3.5 flex grid-cols-2 flex-col gap-y-3.5 md:grid">
-          {data.map(
-            (user) =>
-              currentUserId !== user.userId && (
-                <FoundUserContact key={user.userId} userId={user.userId} username={user.username} />
-              )
-          )}
-        </ul>
-      )}
-
-      {isSuccess && data.length === 0 && <h2 className="text-center text-lg font-bold">No users were found.</h2>}
-    </div>
-  );
-}
+import SearchUsersForm from "../components/forms/searchUserForm";
+import FoundUsersList from "../components/contacts/foundUsersList";
 
 function SignIn() {
   return (
@@ -105,6 +23,7 @@ function SignIn() {
 export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const paramSearchValue = searchParams.get("search")?.toString();
+
   const user = useSelector((state: RootState) => state.user);
 
   return (
@@ -112,7 +31,7 @@ export default function HomePage() {
       {user.isAuth ? (
         <div>
           <SearchUsersForm searchParams={searchParams} setSearchParams={setSearchParams} />
-          {paramSearchValue && <FoundUsers paramSearchValue={paramSearchValue} currentUserId={user.id!} />}
+          {paramSearchValue && <FoundUsersList paramSearchValue={paramSearchValue} currentUserId={user.id!} />}
 
           <div>
             <Divider />
