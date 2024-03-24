@@ -5,7 +5,7 @@ import { Divider } from "primereact/divider";
 import { ProgressSpinner } from "primereact/progressspinner";
 import FoundUserContact from "./foundUserContact";
 
-export default function FoundUsersList({
+export default function FoundUsers({
   paramSearchValue,
   currentUserId,
 }: {
@@ -41,6 +41,9 @@ export default function FoundUsersList({
       )}
 
       {isSuccess && data.length === 0 && <p className="text-center text-lg font-bold">No users were found.</p>}
+      {isSuccess && data.length === 1 && data[0].userId === currentUserId && (
+        <p className="text-center text-lg font-bold">No users were found.</p>
+      )}
     </div>
   );
 }

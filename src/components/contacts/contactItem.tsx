@@ -1,28 +1,18 @@
 import { Avatar } from "primereact/avatar";
-import { Badge } from "primereact/badge";
+// import { Badge } from "primereact/badge";
 import { Link } from "react-router-dom";
 
-export default function Contact({
-  userId,
-  username,
-  message,
-  unreadMessagesCount,
-}: {
-  userId: number;
-  username: string;
-  message: string;
-  unreadMessagesCount: number;
-}) {
+export default function ContactItem({ dialogId, username }: { dialogId: string; username: string }) {
   return (
     <li className="cursor-pointer rounded px-4 py-1.5 transition-colors hover:bg-[var(--surface-ground)]">
-      <Link to={`/dialog/${userId}`} className="flex gap-x-4">
+      <Link to={`/dialog/${dialogId}`} className="flex gap-x-4">
         <Avatar className="p-overlay-badge" icon="pi pi-user" size="large">
-          {unreadMessagesCount && <Badge value={unreadMessagesCount} className="mr-1 mt-1" />}
+          {/* {unreadMessagesCount && <Badge value={unreadMessagesCount} className="mr-1 mt-1" />} */}
         </Avatar>
 
         <div className="mt-auto flex flex-col">
           <h3 className="text-lg font-medium leading-none">{username}</h3>
-          <p className="mt-1 text-[var(--text-color-secondary)]">{message}</p>
+          <p className="mt-1 text-[var(--text-color-secondary)]">{"No messages"}</p>
         </div>
 
         <div className="my-auto ml-auto flex flex-col">

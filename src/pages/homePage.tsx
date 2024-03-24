@@ -3,10 +3,10 @@ import { authPagePath } from "../lib/paths";
 import { Button } from "primereact/button";
 import { useSelector } from "react-redux";
 import { RootState } from "../state/store";
-import { Divider } from "primereact/divider";
-import ContactsList from "../components/contacts/contactsList";
+// import { Divider } from "primereact/divider";
 import SearchUsersForm from "../components/forms/searchUserForm";
-import FoundUsersList from "../components/contacts/foundUsersList";
+import FoundUsers from "../components/contacts/foundUsers";
+import Contacts from "../components/contacts/contacts";
 
 function SignIn() {
   return (
@@ -31,13 +31,8 @@ export default function HomePage() {
       {user.isAuth ? (
         <div>
           <SearchUsersForm searchParams={searchParams} setSearchParams={setSearchParams} />
-          {paramSearchValue && <FoundUsersList paramSearchValue={paramSearchValue} currentUserId={user.id!} />}
-
-          <div>
-            <Divider />
-            <h2 className="mb-3.5 px-3 text-lg font-bold">Contacts</h2>
-            <ContactsList />
-          </div>
+          {paramSearchValue && <FoundUsers paramSearchValue={paramSearchValue} currentUserId={user.id!} />}
+          <Contacts currentUserId={user.id!} />
         </div>
       ) : (
         <SignIn />

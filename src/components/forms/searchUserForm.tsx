@@ -34,6 +34,7 @@ export default function SearchUsersForm({
           <InputText
             className="w-full"
             type="text"
+            id={field.name}
             placeholder="Find an user to chat with"
             onChange={(e) => {
               field.onChange(e.target.value);
