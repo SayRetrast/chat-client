@@ -56,7 +56,7 @@ function SearchUsersForm({
   );
 }
 
-function FoundUsers({ paramSearchValue }: { paramSearchValue?: string }) {
+function FoundUsers({ paramSearchValue, currentUserId }: { paramSearchValue?: string; currentUserId: string }) {
   const { accessToken } = useSelector((state: RootState) => state.accessToken);
   const { data, isLoading, isSuccess } = useSearchUsersQuery({
     accessToken: accessToken!,
@@ -76,9 +76,12 @@ function FoundUsers({ paramSearchValue }: { paramSearchValue?: string }) {
 
       {isSuccess && data.length > 0 && (
         <ul className="mt-3.5 flex grid-cols-2 flex-col gap-y-3.5 md:grid">
-          {data.map((user) => (
-            <FoundUserContact key={user.userId} userId={user.userId} username={user.username} />
-          ))}
+          {data.map(
+            (user) =>
+              currentUserId !== user.userId && (
+                <FoundUserContact key={user.userId} userId={user.userId} username={user.username} />
+              )
+          )}
         </ul>
       )}
 
@@ -109,7 +112,7 @@ export default function HomePage() {
       {user.isAuth ? (
         <div>
           <SearchUsersForm searchParams={searchParams} setSearchParams={setSearchParams} />
-          {paramSearchValue && <FoundUsers paramSearchValue={paramSearchValue} />}
+          {paramSearchValue && <FoundUsers paramSearchValue={paramSearchValue} currentUserId={user.id!} />}
 
           <div>
             <Divider />

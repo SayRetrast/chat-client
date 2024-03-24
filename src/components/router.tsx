@@ -28,7 +28,6 @@ const protectedWhenNotLoginRoutes: RouteProps[] = [
 ];
 
 export default function Router() {
-  // const { user } = useContext(UserContext) as UserContextType;
   const user = useSelector((state: RootState) => state.user);
 
   return (
