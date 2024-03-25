@@ -1,7 +1,7 @@
 import { rootApi } from "../rootApi";
 
 type MessageResponseType = {
-  messageId: string;
+  messageId: number;
   text: string;
   dialogId: string;
   userId: string;

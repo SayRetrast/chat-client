@@ -25,10 +25,20 @@ export default function MessagesList({
     refetch,
   } = useGetDialogMessagesQuery({ accessToken: accessToken, dialogId: dialogId });
 
+  const deleteMessage = (messageId: number) => {
+    try {
+      socket.emit("message_delete", { accessToken: accessToken, messageId: messageId });
+    } catch (error) {
+      console.error("There was an error when trying to delete a message.", error);
+    }
+  };
+
   useEffect(() => {
-    socket?.on("message", refetch);
+    socket.on("message_send", refetch);
+    socket.on("message_delete", refetch);
     return () => {
-      socket?.off("message", refetch);
+      socket.off("message_send", refetch);
+      socket.off("message_delete", refetch);
     };
   }, [socket, refetch]);
 
@@ -60,6 +70,8 @@ export default function MessagesList({
             username={message.userId === toUser.userId ? toUser.username : fromUserUsername}
             date={message.createdAt}
             isRight={message.userId !== toUser.userId}
+            messageId={message.messageId}
+            deleteMessage={deleteMessage}
           />
         ))}
       </ul>

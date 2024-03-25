@@ -26,9 +26,14 @@ export default function SendMessageForm({
     },
   });
 
-  const sendMessageOnSubmit: SubmitHandler<FormInputs> = async (formData) => {
+  const sendMessageOnSubmit: SubmitHandler<FormInputs> = (formData) => {
     try {
-      socket.emit("message", { accessToken: accessToken, text: formData.text, dialogId: dialogId, userId: fromUserId });
+      socket.emit("message_send", {
+        accessToken: accessToken,
+        text: formData.text,
+        dialogId: dialogId,
+        userId: fromUserId,
+      });
     } catch (error) {
       console.error("There was an error when trying to send a message.", error);
     }
