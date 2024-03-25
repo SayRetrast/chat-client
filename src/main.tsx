@@ -1,15 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import { PrimeReactProvider } from "primereact/api";
 import "./index.css";
-import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/themes/luna-amber/theme.css";
 import "primeicons/primeicons.css";
+import App from "./app";
+import { PrimeReactProvider } from "primereact/api";
+import { primeReactConfig } from "./lib/primeReactConfig";
+import { Provider } from "react-redux";
+import { store } from "./state/store";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <PrimeReactProvider>
-      <App />
+    <PrimeReactProvider value={primeReactConfig}>
+      <Provider store={store}>
+        <App />
+      </Provider>
     </PrimeReactProvider>
   </React.StrictMode>
 );
