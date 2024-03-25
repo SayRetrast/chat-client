@@ -13,7 +13,7 @@ export const authApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
     registration: builder.mutation<AuthResponseType, AuthBodyType>({
       query: (body) => ({
-        url: "auth/registration/",
+        url: "auth/registration",
         method: "POST",
         body,
         credentials: "include",
@@ -22,7 +22,7 @@ export const authApi = rootApi.injectEndpoints({
 
     login: builder.mutation<AuthResponseType, AuthBodyType>({
       query: (body) => ({
-        url: "auth/login/",
+        url: "auth/login",
         method: "POST",
         body,
         credentials: "include",
@@ -31,7 +31,7 @@ export const authApi = rootApi.injectEndpoints({
 
     auth: builder.mutation<AuthResponseType, void>({
       query: () => ({
-        url: "auth/",
+        url: "auth",
         method: "PUT",
         credentials: "include",
       }),
@@ -39,7 +39,7 @@ export const authApi = rootApi.injectEndpoints({
 
     delete: builder.mutation<void, { accessToken: string }>({
       query: ({ accessToken }) => ({
-        url: "auth/logout/",
+        url: "auth/logout",
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${accessToken}`,
