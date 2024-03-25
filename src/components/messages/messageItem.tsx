@@ -24,11 +24,6 @@ export default function MessageItem({
 
       <div className="flex gap-x-2">
         <p className="mt-1">{text}</p>
-
-        <div className="ml-auto mt-auto flex flex-col">
-          {!isRight && <i className="pi pi-check translate-y-1 text-xs text-[var(--text-color-secondary)]"></i>}
-          <i className="pi pi-check -translate-y-1 text-xs text-[var(--text-color-secondary)]"></i>
-        </div>
       </div>
     </div>
   );
