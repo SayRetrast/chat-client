@@ -1,23 +1,25 @@
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useSendMessageMutation } from "../../state/services/message.service";
+import { Socket } from "socket.io-client";
 
 interface FormInputs {
   text: string;
 }
 
 export default function SendMessageForm({
-  isLoading,
   accessToken,
-  toUserId,
+  dialogId,
+  isLoading,
+  socket,
+  fromUserId,
 }: {
-  isLoading: boolean;
   accessToken: string;
-  toUserId: string;
+  dialogId: string;
+  isLoading: boolean;
+  socket: Socket;
+  fromUserId: string;
 }) {
-  const [sendMutation] = useSendMessageMutation();
-
   const { handleSubmit, control } = useForm<FormInputs>({
     defaultValues: {
       text: "",
@@ -26,7 +28,7 @@ export default function SendMessageForm({
 
   const sendMessageOnSubmit: SubmitHandler<FormInputs> = async (formData) => {
     try {
-      sendMutation({ accessToken: accessToken, toUserId: toUserId, text: formData.text });
+      socket.emit("message", { accessToken: accessToken, text: formData.text, dialogId: dialogId, userId: fromUserId });
     } catch (error) {
       console.error("There was an error when trying to send a message.", error);
     }

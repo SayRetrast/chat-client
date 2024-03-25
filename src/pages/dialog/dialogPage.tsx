@@ -1,18 +1,25 @@
 import { useParams } from "react-router-dom";
-import { useGetUserByIdQuery } from "../../state/services/user.service";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
 import { ProgressSpinner } from "primereact/progressspinner";
 import MessagesList from "../../components/messages/messagesList";
 import SendMessageForm from "../../components/forms/sendMessageForm";
+import { useGetDialogByIdQuery } from "../../state/services/dialog.service";
+import { io, Socket } from "socket.io-client";
 
 export default function DialogPage() {
-  const { userId } = useParams();
+  const { dialogId } = useParams();
+
+  const socket: Socket = io(import.meta.env.VITE_BASE_URL);
 
   const fromUser = useSelector((state: RootState) => state.user);
   const { accessToken } = useSelector((state: RootState) => state.accessToken);
 
-  const { data: user, isLoading, isSuccess } = useGetUserByIdQuery({ accessToken: accessToken!, userId: userId! });
+  const {
+    data: dialog,
+    isLoading,
+    isSuccess,
+  } = useGetDialogByIdQuery({ accessToken: accessToken!, dialogId: dialogId! });
 
   return (
     <div className="flex h-[calc(100svh_-_46px_-_4rem)] flex-col gap-y-3">
@@ -22,9 +29,29 @@ export default function DialogPage() {
         </div>
       )}
 
-      {isSuccess && <MessagesList accessToken={accessToken!} toUser={user} fromUserUsername={fromUser.username!} />}
+      {isSuccess && (
+        <div className="flex flex-col gap-y-4">
+          <p className="text-center font-medium">
+            Chatting with {fromUser.id === dialog.userOneId ? dialog.userTwo.username : dialog.userOne.username}
+          </p>
 
-      <SendMessageForm accessToken={accessToken!} toUserId={userId!} isLoading={isLoading} />
+          <MessagesList
+            dialogId={dialogId!}
+            accessToken={accessToken!}
+            toUser={fromUser.id === dialog.userOneId ? dialog.userTwo : dialog.userOne}
+            fromUserUsername={fromUser.username!}
+            socket={socket}
+          />
+        </div>
+      )}
+
+      <SendMessageForm
+        accessToken={accessToken!}
+        dialogId={dialogId!}
+        socket={socket}
+        fromUserId={fromUser.id!}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

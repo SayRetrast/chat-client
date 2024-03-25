@@ -33,7 +33,16 @@ export const dialogApi = rootApi.injectEndpoints({
       }),
       providesTags: ["Dialog"],
     }),
+
+    getDialogById: builder.query<DialogResponseType, { accessToken: string; dialogId: string }>({
+      query: ({ accessToken, dialogId }) => ({
+        url: `dialogs/dialog/${dialogId}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useCreateDialogMutation, useGetUserDialogsQuery } = dialogApi;
+export const { useCreateDialogMutation, useGetUserDialogsQuery, useGetDialogByIdQuery } = dialogApi;

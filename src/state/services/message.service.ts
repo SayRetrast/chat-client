@@ -3,17 +3,17 @@ import { rootApi } from "../rootApi";
 type MessageResponseType = {
   messageId: string;
   text: string;
-  fromUserId: string;
-  toUserId: string;
+  dialogId: string;
+  userId: string;
   createdAt: string;
   updatedAt: string;
 };
 
 export const messageApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
-    sendMessage: builder.mutation<MessageResponseType, { accessToken: string; toUserId: string; text: string }>({
-      query: ({ accessToken, toUserId, text }) => ({
-        url: `messages/${toUserId}`,
+    sendMessage: builder.mutation<MessageResponseType, { accessToken: string; dialogId: string; text: string }>({
+      query: ({ accessToken, dialogId, text }) => ({
+        url: `messages/message/${dialogId}`,
         method: "POST",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -23,9 +23,9 @@ export const messageApi = rootApi.injectEndpoints({
       invalidatesTags: ["Message"],
     }),
 
-    getDialogMessages: builder.query<MessageResponseType[], { accessToken: string; toUserId: string }>({
-      query: ({ accessToken, toUserId }) => ({
-        url: `messages/dialog/${toUserId}`,
+    getDialogMessages: builder.query<MessageResponseType[], { accessToken: string; dialogId: string }>({
+      query: ({ accessToken, dialogId }) => ({
+        url: `messages/dialog/${dialogId}`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

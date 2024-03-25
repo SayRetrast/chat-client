@@ -10,8 +10,12 @@ export default function FoundUserContact({ userId, username }: { userId: string;
   const [createDialog] = useCreateDialogMutation();
 
   const createDialogHandler = async () => {
-    const dialog = await createDialog({ accessToken: accessToken!, userId: userId }).unwrap();
-    navigate(`/dialog/${dialog.dialogId}`);
+    try {
+      const dialog = await createDialog({ accessToken: accessToken!, userId: userId }).unwrap();
+      navigate(`/dialog/${dialog.dialogId}`);
+    } catch (error) {
+      console.error("There was an error when trying to make an dialog.", error);
+    }
   };
 
   return (
