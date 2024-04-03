@@ -11,7 +11,7 @@ npm run build
 ```
 then use
 ```
-npm run start
+npm run preview
 ```
 
 ## Tech stack
