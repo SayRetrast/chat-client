@@ -1,5 +1,10 @@
 # Frontend for the chat app
 
+Install packages
+```
+npm install
+```
+
 To start in dev mod
 ```
 npm run dev
