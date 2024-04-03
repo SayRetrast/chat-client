@@ -1,4 +1,4 @@
-# Frontend for tha chat app
+# Frontend for the chat app
 
 To start in dev mod
 ```
